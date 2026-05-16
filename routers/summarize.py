@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 router = APIRouter()
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 
 class SummarizeRequest(BaseModel):
@@ -21,6 +20,7 @@ class SummarizeResponse(BaseModel):
 
 @router.post("", response_model=SummarizeResponse)
 def summarize_project(body: SummarizeRequest):
+    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
     todo = [t for t in body.tasks if t.get("status") == "TODO"]
     in_progress = [t for t in body.tasks if t.get("status") == "IN_PROGRESS"]
     done = [t for t in body.tasks if t.get("status") == "DONE"]

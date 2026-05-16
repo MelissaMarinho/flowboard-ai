@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 router = APIRouter()
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 
 class PrioritizeRequest(BaseModel):
@@ -21,6 +20,7 @@ class PrioritizeResponse(BaseModel):
 
 @router.post("", response_model=PrioritizeResponse)
 def prioritize_tasks(body: PrioritizeRequest):
+    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
     task_list = "\n".join(
         f"- id: {t.get('id')}, title: {t.get('title')}, current priority: {t.get('priority', 'N/A')}, due: {t.get('dueDate', 'none')}"
         for t in body.tasks
